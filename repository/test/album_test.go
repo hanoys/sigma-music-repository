@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	"github.com/hanoys/sigma-music/internal/adapters/repository"
-	"github.com/hanoys/sigma-music/internal/ports"
+	"github.com/hanoys/sigma-music-core/ports"
+	"github.com/hanoys/sigma-music-repository/repository"
 	"testing"
 )
 

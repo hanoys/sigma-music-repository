@@ -2,8 +2,7 @@ package entity
 
 import (
 	"github.com/google/uuid"
-	"github.com/guregu/null/v5"
-	"github.com/hanoys/sigma-music/internal/domain"
+	"github.com/hanoys/sigma-music-core/domain"
 )
 
 type PgAlbum struct {

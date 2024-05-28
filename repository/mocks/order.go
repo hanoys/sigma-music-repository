@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	domain "github.com/hanoys/sigma-music/internal/domain"
+	domain "github.com/hanoys/sigma-music-core/domain"
 	mock "github.com/stretchr/testify/mock"
 )
 
