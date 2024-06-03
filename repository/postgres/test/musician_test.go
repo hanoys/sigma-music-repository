@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hanoys/sigma-music-core/domain"
 	"github.com/hanoys/sigma-music-core/ports"
-	"github.com/hanoys/sigma-music-repository/repository"
+	"github.com/hanoys/sigma-music-repository/repository/postgres"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -52,7 +52,7 @@ func TestMusicianRepository(t *testing.T) {
 		}
 		defer db.Close()
 
-		repo := repository.NewPostgresMusicianRepository(db)
+		repo := postgres.NewPostgresMusicianRepository(db)
 		createdMusician, err := repo.Create(ctx, newMusician)
 		if err != nil {
 			t.Errorf("unexcpected error: %v", err)
@@ -75,7 +75,7 @@ func TestMusicianRepository(t *testing.T) {
 		}
 
 		defer db.Close()
-		repo := repository.NewPostgresMusicianRepository(db)
+		repo := postgres.NewPostgresMusicianRepository(db)
 		repo.Create(ctx, newMusician)
 		_, err = repo.Create(ctx, newMusician)
 
@@ -98,7 +98,7 @@ func TestMusicianRepository(t *testing.T) {
 		}
 
 		defer db.Close()
-		repo := repository.NewPostgresMusicianRepository(db)
+		repo := postgres.NewPostgresMusicianRepository(db)
 		repo.Create(ctx, newMusician)
 		foundMusician, err := repo.GetByID(ctx, newMusician.ID)
 
@@ -123,7 +123,7 @@ func TestMusicianRepository(t *testing.T) {
 		}
 
 		defer db.Close()
-		repo := repository.NewPostgresMusicianRepository(db)
+		repo := postgres.NewPostgresMusicianRepository(db)
 		repo.Create(ctx, newMusician)
 		foundMusician, err := repo.GetByEmail(ctx, newMusician.Email)
 

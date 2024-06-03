@@ -6,20 +6,19 @@ import (
 	"github.com/google/uuid"
 	"github.com/hanoys/sigma-music-core/domain"
 	"github.com/hanoys/sigma-music-core/ports"
-	"github.com/hanoys/sigma-music-repository/repository"
+	"github.com/hanoys/sigma-music-repository/repository/postgres"
 	"testing"
 	"time"
 )
 
-var newSubscription = domain.Subscription{
-	ID:             uuid.New(),
-	UserID:         uuid.New(),
-	OrderID:        uuid.New(),
-	StartDate:      time.Now(),
-	ExpirationDate: time.Now(),
+var newOrder = domain.Order{
+	ID:         uuid.New(),
+	UserID:     uuid.New(),
+	CreateTime: time.Time{},
+	Price:      money.New(100, money.RUB),
 }
 
-func TestSubscriptionRepository(t *testing.T) {
+func TestOrderRepository(t *testing.T) {
 	ctx := context.Background()
 	container, err := newPostgresContainer(ctx)
 	if err != nil {
@@ -38,7 +37,7 @@ func TestSubscriptionRepository(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Run("create subscription", func(t *testing.T) {
+	t.Run("create order", func(t *testing.T) {
 		t.Cleanup(func() {
 			err = container.Restore(ctx)
 			if err != nil {
@@ -52,9 +51,9 @@ func TestSubscriptionRepository(t *testing.T) {
 		}
 		defer db.Close()
 
-		repo := repository.NewPostgresSubscriptionRepository(db)
-		_, err = repo.Create(ctx, newSubscription)
-		if !errors.Is(err, ports.ErrInternalSubRepo) {
+		repo := postgres.NewPostgresOrderRepository(db)
+		_, err = repo.Create(ctx, newOrder)
+		if !errors.Is(err, ports.ErrInternalOrderRepo) {
 			t.Errorf("unexpected error: %v", err)
 		}
 	})

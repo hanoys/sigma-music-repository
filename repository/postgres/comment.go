@@ -1,4 +1,4 @@
-package repository
+package postgres
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/hanoys/sigma-music-core/domain"
 	"github.com/hanoys/sigma-music-core/ports"
 	"github.com/hanoys/sigma-music-core/util"
-	"github.com/hanoys/sigma-music-repository/repository/entity"
+	entity2 "github.com/hanoys/sigma-music-repository/repository/postgres/entity"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jmoiron/sqlx"
@@ -28,8 +28,8 @@ func NewPostgresCommentRepository(db *sqlx.DB) *PostgresCommentRepository {
 }
 
 func (cr *PostgresCommentRepository) Create(ctx context.Context, comment domain.Comment) (domain.Comment, error) {
-	pgComment := entity.NewPgComment(comment)
-	queryString := entity.InsertQueryString(pgComment, "comments")
+	pgComment := entity2.NewPgComment(comment)
+	queryString := entity2.InsertQueryString(pgComment, "comments")
 	_, err := cr.db.NamedExecContext(ctx, queryString, pgComment)
 	if err != nil {
 		var pgErr *pgconn.PgError
@@ -41,7 +41,7 @@ func (cr *PostgresCommentRepository) Create(ctx context.Context, comment domain.
 		return domain.Comment{}, util.WrapError(ports.ErrInternalCommentRepo, err)
 	}
 
-	var createdTrack entity.PgComment
+	var createdTrack entity2.PgComment
 	err = cr.db.GetContext(ctx, &createdTrack, commentGetByIDQuery, pgComment.ID)
 	if err != nil {
 		return domain.Comment{}, util.WrapError(ports.ErrCommentIDNotFound, err)
@@ -51,7 +51,7 @@ func (cr *PostgresCommentRepository) Create(ctx context.Context, comment domain.
 }
 
 func (cr *PostgresCommentRepository) GetByUserID(ctx context.Context, userID uuid.UUID) ([]domain.Comment, error) {
-	var comments []entity.PgComment
+	var comments []entity2.PgComment
 	err := cr.db.SelectContext(ctx, &comments, commentGetByUserIDQuery, userID)
 	if err != nil {
 		return nil, util.WrapError(ports.ErrInternalCommentRepo, err)
@@ -66,7 +66,7 @@ func (cr *PostgresCommentRepository) GetByUserID(ctx context.Context, userID uui
 }
 
 func (cr *PostgresCommentRepository) GetByTrackID(ctx context.Context, trackID uuid.UUID) ([]domain.Comment, error) {
-	var comments []entity.PgComment
+	var comments []entity2.PgComment
 	err := cr.db.SelectContext(ctx, &comments, commentGetByTrackIDQuery, trackID)
 	if err != nil {
 		return nil, util.WrapError(ports.ErrInternalCommentRepo, err)

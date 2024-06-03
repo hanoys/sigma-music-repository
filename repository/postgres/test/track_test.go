@@ -4,12 +4,20 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"github.com/hanoys/sigma-music-core/domain"
 	"github.com/hanoys/sigma-music-core/ports"
-	"github.com/hanoys/sigma-music-repository/repository"
+	"github.com/hanoys/sigma-music-repository/repository/postgres"
 	"testing"
 )
 
-func TestAlbumRepository(t *testing.T) {
+var newTrack = domain.Track{
+	ID:      uuid.New(),
+	AlbumID: uuid.New(),
+	Name:    "Track",
+	URL:     "URL",
+}
+
+func TestTrackRepository(t *testing.T) {
 	ctx := context.Background()
 	container, err := newPostgresContainer(ctx)
 	if err != nil {
@@ -28,7 +36,7 @@ func TestAlbumRepository(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Run("get album by musician id", func(t *testing.T) {
+	t.Run("create track", func(t *testing.T) {
 		t.Cleanup(func() {
 			err = container.Restore(ctx)
 			if err != nil {
@@ -42,35 +50,14 @@ func TestAlbumRepository(t *testing.T) {
 		}
 		defer db.Close()
 
-		repo := repository.NewPostgresAlbumRepository(db)
-		albums, err := repo.GetByMusicianID(ctx, uuid.New())
-		if len(albums) != 0 {
-			t.Errorf("unexpected albums count: %v", len(albums))
-		}
-	})
-
-	t.Run("get album by id", func(t *testing.T) {
-		t.Cleanup(func() {
-			err = container.Restore(ctx)
-			if err != nil {
-				t.Fatal(err)
-			}
-		})
-
-		db, err := newPostgresDB(url)
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer db.Close()
-
-		repo := repository.NewPostgresAlbumRepository(db)
-		_, err = repo.GetByID(ctx, uuid.New())
-		if !errors.Is(err, ports.ErrAlbumIDNotFound) {
+		repo := postgres.NewPostgresTrackRepository(db)
+		_, err = repo.Create(ctx, newTrack)
+		if !errors.Is(err, ports.ErrInternalTrackRepo) {
 			t.Errorf("unexpected error: %v", err)
 		}
 	})
 
-	t.Run("publish album", func(t *testing.T) {
+	t.Run("delete track", func(t *testing.T) {
 		t.Cleanup(func() {
 			err = container.Restore(ctx)
 			if err != nil {
@@ -84,9 +71,9 @@ func TestAlbumRepository(t *testing.T) {
 		}
 		defer db.Close()
 
-		repo := repository.NewPostgresAlbumRepository(db)
-		err = repo.Publish(ctx, uuid.New())
-		if !errors.Is(err, ports.ErrAlbumIDNotFound) {
+		repo := postgres.NewPostgresTrackRepository(db)
+		_, err = repo.Delete(ctx, uuid.New())
+		if !errors.Is(err, ports.ErrTrackIDNotFound) {
 			t.Errorf("unexpected error: %v", err)
 		}
 	})

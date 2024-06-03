@@ -1,4 +1,4 @@
-package repository
+package postgres
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/hanoys/sigma-music-core/domain"
 	"github.com/hanoys/sigma-music-core/ports"
 	"github.com/hanoys/sigma-music-core/util"
-	"github.com/hanoys/sigma-music-repository/repository/entity"
+	"github.com/hanoys/sigma-music-repository/repository/postgres/entity"
 	"github.com/jmoiron/sqlx"
 )
 
