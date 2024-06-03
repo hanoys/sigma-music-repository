@@ -3,7 +3,7 @@ package entity
 import (
 	"github.com/Rhymond/go-money"
 	"github.com/google/uuid"
-	"github.com/hanoys/sigma-music/internal/domain"
+	"github.com/hanoys/sigma-music-core/domain"
 	"time"
 )
 

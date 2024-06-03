@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/hanoys/sigma-music/internal/domain"
+	"github.com/hanoys/sigma-music-core/domain"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

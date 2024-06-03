@@ -2,10 +2,10 @@ package mongodb
 
 import (
 	"context"
-	entity2 "github.com/hanoys/sigma-music/internal/adapters/repository/mongodb/entity"
-	"github.com/hanoys/sigma-music/internal/domain"
-	"github.com/hanoys/sigma-music/internal/ports"
-	"github.com/hanoys/sigma-music/internal/util"
+	"github.com/hanoys/sigma-music-core/domain"
+	"github.com/hanoys/sigma-music-core/ports"
+	"github.com/hanoys/sigma-music-core/util"
+	entity2 "github.com/hanoys/sigma-music-repository/repository/mongodb/entity"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
