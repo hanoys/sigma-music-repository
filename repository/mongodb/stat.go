@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/hanoys/sigma-music-core/domain"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,11 +19,16 @@ func NewMongoStatRepository(db *mongo.Database) *MongoStatRepository {
 var listenedTracks []uuid.UUID
 
 func (sr *MongoStatRepository) Add(ctx context.Context, userID uuid.UUID, trackID uuid.UUID) error {
+	if listenedTracks == nil {
+		listenedTracks = make([]uuid.UUID, 0)
+	}
+	
 	listenedTracks = append(listenedTracks, trackID)
 	return nil
 }
 
 func (sr *MongoStatRepository) GetMostListenedMusicians(ctx context.Context, userID uuid.UUID, maxCnt int) ([]domain.UserMusiciansStat, error) {
+	fmt.Printf("listened list: %v", listenedTracks)
 	r := NewMongoMusicianRepository(sr.db.Database())
 	var musiciansListenCount map[uuid.UUID]int64
 
