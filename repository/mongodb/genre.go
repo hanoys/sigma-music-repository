@@ -56,7 +56,7 @@ func (gr *MongoGenreRepository) GetAll(ctx context.Context) ([]domain.Genre, err
 }
 
 func (gr *MongoGenreRepository) GetByID(ctx context.Context, id uuid.UUID) (domain.Genre, error) {
-	result := gr.db.FindOne(ctx, bson.M{"_id": id})
+	result := gr.db.FindOne(ctx, bson.M{"id": id})
 
 	var mgGenre entity2.MongoGenre
 	if err := result.Decode(&mgGenre); err != nil {
