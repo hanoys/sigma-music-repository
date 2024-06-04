@@ -22,7 +22,7 @@ func (sr *MongoStatRepository) Add(ctx context.Context, userID uuid.UUID, trackI
 	if listenedTracks == nil {
 		listenedTracks = make([]uuid.UUID, 0)
 	}
-	
+
 	listenedTracks = append(listenedTracks, trackID)
 	return nil
 }
@@ -30,7 +30,7 @@ func (sr *MongoStatRepository) Add(ctx context.Context, userID uuid.UUID, trackI
 func (sr *MongoStatRepository) GetMostListenedMusicians(ctx context.Context, userID uuid.UUID, maxCnt int) ([]domain.UserMusiciansStat, error) {
 	fmt.Printf("listened list: %v", listenedTracks)
 	r := NewMongoMusicianRepository(sr.db.Database())
-	var musiciansListenCount map[uuid.UUID]int64
+	musiciansListenCount := make(map[uuid.UUID]int64)
 
 	for _, trackID := range listenedTracks {
 		musician, _ := r.GetByTrackID(ctx, trackID)
@@ -52,7 +52,7 @@ func (sr *MongoStatRepository) GetMostListenedMusicians(ctx context.Context, use
 
 func (sr *MongoStatRepository) GetListenedGenres(ctx context.Context, userID uuid.UUID) ([]domain.UserGenresStat, error) {
 	r := NewMongoGenreRepository(sr.db.Database())
-	var genresListenCount map[uuid.UUID]int64
+	genresListenCount := make(map[uuid.UUID]int64)
 
 	for _, trackID := range listenedTracks {
 		genres, _ := r.GetByTrackID(ctx, trackID)
